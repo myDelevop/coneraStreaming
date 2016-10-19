@@ -1,0 +1,20 @@
+@relation dataSet
+
+@attribute id numeric
+@attribute buoyancy numeric
+@attribute prismatic numeric
+@attribute length numeric
+@attribute draught numeric
+@attribute beam numeric
+@attribute froude numeric
+@attribute resistance numeric
+
+@data
+278,-5,0.53,4.78,3.75,3.15,0.425,37.14
+112,-2.2,0.546,4.78,4.13,3.07,0.125,0.15
+150,-5,0.565,4.77,3.99,3.15,0.375,12.71
+97,-2.3,0.562,5.14,4.95,3.17,0.45,47.29
+71,-2.4,0.568,4.34,2.98,3.15,0.15,0.26
+283,-2.3,0.6,5.1,4.17,3.51,0.2,0.73
+185,-2.3,0.53,5.11,3.69,3.51,0.2,0.75
+144,-2.11,0.33,5.32,3.22,3.37,1.2,9.1
