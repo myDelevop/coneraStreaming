@@ -630,7 +630,7 @@ public class DataSetUtility {
 				int i;
 				int j = 0; // count all attributes (descr + coll)
 				for(i=0;i<n.getValues().size();i++) { // descriptive attributes 
-					Value v = n.getCollectiveValue(i);
+					Value v = n.getValue(i);
 					
 					if(v instanceof ContinuousValue)
                         instance.setValue(i, (double)v.getValue());
