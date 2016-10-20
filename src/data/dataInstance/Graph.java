@@ -200,17 +200,41 @@ public class Graph implements Iterable<Node>{
 	
 	
 	
-	public void computeCollectiveValuesOnline(COLLECTIVESCHEMA schema){
-		if(schema==COLLECTIVESCHEMA.Frequency)
-			computeFrequencyCollectiveValuesOnline();
-		else
-			computeCollectiveValues();
+	public void computeCollectiveValuesOnline(COLLECTIVESCHEMA schema) {
+	    
+	    switch (schema) {
+        case Mean:
+            computeMeanCollectiveValues();
+            break;
+
+        case Frequency:
+            computeFrequencyCollectiveValuesOnline();
+            break;
+        
+        case Average:
+            break;
+
+        case GI:
+            break;
+
+        case Cluster:
+            break;
+        
+        default:
+            // TODO throw new collectiveSchemaNotFoundException
+            System.err.println("Use a valid collective schema");
+            break;
+        }
+	    
+	    
+	    
+	    
 	}
 	/**
 	 * 
 	 * @param nodeSet nodi dei quali si intendono calcolare i valori collettivi
 	 */
-	private void computeCollectiveValues(){
+	private void computeMeanCollectiveValues(){
 		
 		MeanAttribute ma = null;
 		WMeanAttribute wma = null;
@@ -392,10 +416,31 @@ private void computeFrequencyCollectiveValuesOnline(){
 	}
 	
 public void computeCollectiveValuesOffline(COLLECTIVESCHEMA schema){
-	if(schema==COLLECTIVESCHEMA.Frequency)
-		computeFrequencyCollectiveValuesOffline();
-	else
-		computeCollectiveValues();
+    
+    switch (schema) {
+    case Mean:
+        computeMeanCollectiveValues();
+        break;
+
+    case Frequency:
+        computeFrequencyCollectiveValuesOffline();
+        break;
+    
+    case Average:
+        break;
+
+    case GI:
+        break;
+
+    case Cluster:
+        break;
+    
+    default:
+        // TODO throw new collectiveSchemaNotFoundException
+        System.err.println("Use a valid collective schema");
+        break;
+    }
+    
 }
 	
 private void computeFrequencyCollectiveValuesOffline(){

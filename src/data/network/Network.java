@@ -511,51 +511,64 @@ public class Network{
 			int nN = ((ns.rmax-ns.rmin)/ns.step)+1;
 			int idS=1;
 			
-			//AA: Lo schema frequenza può essere defiito solo dopo la discretizzazione, quanod èesplicitato in numero di intervalli
-			if(schema.equals(COLLECTIVESCHEMA.Frequency)){
-			/*	for(i=1;i<=nN;i++){
-					for(int j=1;j<=l.getDiscreteIntervalNumber();j++)
-						collAttributes.add(new FrequencyAttribute("freq_N"+i+"D"+j, idS++,ns.weight));
-				}*/
-				
-				
-					// è necessario creare il collective schema perche quando si è chiamatato arffSchema non c'erano le informazioni per farlo
-				Collection<Double> bins=network.getSchema().getTarget().discreteBins();
-				for(i=1;i<=nN;i++){
-					Iterator<Double> it=bins.iterator();
-					double inf=it.next();
-					while (it.hasNext())	{
-						double sup=it.next();
-						String value=inf+"__"+sup;
-						value=value.replace(".", "_");
-						collAttributes.add(new FrequencyAttribute("freq_N"+i+"D"+value, idS++,ns.weight));
-						
-						inf=sup;
-								
-						
-					}
-				}
-				
+			switch (schema) {
+			case Mean:
+			    for(i=1;i<=nN;i++){
+			        collAttributes.add(new MeanAttribute("mean_"+i,idS++));
+			        collAttributes.add(new WMeanAttribute("wMean_"+i,idS++,ns.weight));
+			        collAttributes.add(new StdDevAttribute("stdDev_"+i,idS++));
+			    }
+			    if(nN!=1)
+			        for(i=1;i<=nN;i++){
+			            int j=i+1;
+			            if(j<=nN){
+			                collAttributes.add(new SpeedAttribute("speed_"+i+"_"+j,idS++));
+			                collAttributes.add(new WSpeedAttribute("wSpeed_"+i+"_"+j,idS++));
+			            }
+			        }
+
+			    break;
+
+			case Frequency:
+			    //AA: Lo schema frequenza può essere defiito solo dopo la discretizzazione, quanod èesplicitato in numero di intervalli
+
+			    /*  for(i=1;i<=nN;i++){
+                for(int j=1;j<=l.getDiscreteIntervalNumber();j++)
+                    collAttributes.add(new FrequencyAttribute("freq_N"+i+"D"+j, idS++,ns.weight));
+            }*/
+
+
+			    // è necessario creare il collective schema perche quando si è chiamatato arffSchema non c'erano le informazioni per farlo
+			    Collection<Double> bins=network.getSchema().getTarget().discreteBins();
+			    for(i=1;i<=nN;i++){
+			        Iterator<Double> it=bins.iterator();
+			        double inf=it.next();
+			        while (it.hasNext()) {
+			            double sup=it.next();
+			            String value=inf+"__"+sup;
+			            value=value.replace(".", "_");
+			            collAttributes.add(new FrequencyAttribute("freq_N"+i+"D"+value, idS++,ns.weight));
+
+			            inf=sup;
+			        }
+			    }
+                break;
 			
+            case Average:
+                break;
+
+            case GI:
+                break;
+
+            case Cluster:
+                break;
+            
+            default:
+                // TODO throw new collectiveSchemaNotFoundException
+                System.err.println("Use a valid collective schema");
+                break;
 			}
-			else
-			if(schema.equals(COLLECTIVESCHEMA.Mean)){
-			for(i=1;i<=nN;i++){
-				collAttributes.add(new MeanAttribute("mean_"+i,idS++));
-				collAttributes.add(new WMeanAttribute("wMean_"+i,idS++,ns.weight));
-				collAttributes.add(new StdDevAttribute("stdDev_"+i,idS++));
-			}
-			if(nN!=1)
-				for(i=1;i<=nN;i++){
-					int j=i+1;
-					if(j<=nN){
-					collAttributes.add(new SpeedAttribute("speed_"+i+"_"+j,idS++));
-						collAttributes.add(new WSpeedAttribute("wSpeed_"+i+"_"+j,idS++));
-					}
-				}
-			}
-			
-			
+
 			network.getSchema().setCollectiveAttributes(collAttributes);
 		}
 		

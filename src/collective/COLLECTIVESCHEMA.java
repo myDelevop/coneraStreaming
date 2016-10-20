@@ -1,5 +1,5 @@
 package collective;
 
 public enum COLLECTIVESCHEMA {
-	Frequency, Mean
+    Mean, Frequency, Average, GI, Cluster
 }
