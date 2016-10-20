@@ -1,15 +1,12 @@
 package data.network;
 
-import java.util.TreeSet;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
-import weka.core.FastVector;
-import weka.core.Instance;
-import weka.core.Instances;
 import data.dataInstance.ContinuousValue;
 import data.dataInstance.Graph;
 import data.dataInstance.Node;
@@ -18,6 +15,9 @@ import data.schema.Attribute;
 import data.schema.CollectiveAttribute;
 import data.schema.ContinuousAttribute;
 import data.schema.DiscreteAttribute;
+import weka.core.FastVector;
+import weka.core.Instance;
+import weka.core.Instances;
 
 public class DataSetUtility {
 	
@@ -435,24 +435,43 @@ public class DataSetUtility {
 	 * 
 	 * @return FastVector contenente gli attributi per trainingSet e workingSet di una vista definita per un problema di regressione
 	 */
-	private FastVector createRegressionCollectiveHeader(){
-		//creo  l'header di per l'instanziazione dell'Instances
-		FastVector attributes = new FastVector();
-		int index = 0;
-		
-		//aggiungo gli attributi collective di schema
-		Iterator<CollectiveAttribute> it = g.getSchema().getCollectiveAttrIterator();
-		while(it.hasNext()){
-			CollectiveAttribute current = it.next();
-			attributes.addElement(new weka.core.Attribute(current.getName(),current.getIndexValue()));
-			index++;
-		}
-		
-		//aggiungo in coda l'attributo target
-		attributes.addElement(new weka.core.Attribute(g.getSchema().getTarget().getName(),index));
-		
-		return attributes;
-	}
+	private FastVector createRegressionCollectiveHeader() {
+        //creo  l'header di per l'instanziazione dell'Instances
+        FastVector attributes = new FastVector();
+        int index = 0;
+        
+        //aggiungo gli attributi collective e descrittivi di schema 
+        Iterator<Attribute> itDescriptive = g.getSchema().getIteratorExplanatory();
+        while(itDescriptive.hasNext()) {
+            Attribute current = itDescriptive.next();
+            weka.core.Attribute wa = null;
+            if (current instanceof ContinuousAttribute)
+                wa = new weka.core.Attribute(current.getName(), current.getIndexValue());
+            else {
+                Set<String> discreteValues = ((DiscreteAttribute) current).getValues();
+                FastVector fv = new FastVector(discreteValues.size());
+                for (String s : discreteValues) {
+                    fv.addElement(s);
+                }
+
+                wa = new weka.core.Attribute(current.getName(), fv, current.getIndexValue());
+            }
+            attributes.addElement(wa);
+            index++;
+        }
+        
+        Iterator<CollectiveAttribute> itCollective = g.getSchema().getCollectiveAttrIterator();
+        while(itCollective.hasNext()){
+            CollectiveAttribute current = itCollective.next();
+            attributes.addElement(new weka.core.Attribute(current.getName(),current.getIndexValue()));
+            index++;
+        }
+        
+        //aggiungo in coda l'attributo target
+        attributes.addElement(new weka.core.Attribute(g.getSchema().getTarget().getName(),index));
+        
+        return attributes;
+    }
 	
 	
 	/**
@@ -594,7 +613,7 @@ public class DataSetUtility {
 	 * 
 	 * @return Instances contenente gli elementi collective dei nodi sample del network per uan vista definita con un attributo target per la regressione
 	 */
-	public Instances createRegressionCollectiveTrainingSet(){
+	public Instances createRegressionCollectiveTrainingSet() {
 		
 		FastVector fv = createRegressionCollectiveHeader();
 		Instances trainingSet = new Instances("collectiveTrainingSet",fv,0); //creo il trainingSet vuoto
@@ -603,19 +622,32 @@ public class DataSetUtility {
 		//aggiungo ogni nodo sample al trainingSet
 		Instance instance = null;
 		
-		for(Node n : g.nodes()){
-			if(n.isSample() || n.isWorkingToSample()){
+		for(Node n : g.nodes()) {
+			if(n.isSample() || n.isWorkingToSample()) {
 				instance = new Instance(fv.size());
 				instance.setDataset(trainingSet);
 				
-				int j;
-				for(j=0;j<n.getCollectiveValues().size();j++){
-					Value v = n.getCollectiveValue(j);
-					instance.setValue(j, (double)v.getValue());
+				int i;
+				int j = 0; // count all attributes (descr + coll)
+				for(i=0;i<n.getCollectiveValues().size();i++) { // descriptive attributes 
+					Value v = n.getCollectiveValue(i);
+					
+					if(v instanceof ContinuousValue)
+                        instance.setValue(i, (double)v.getValue());
+                    else 
+                        instance.setValue(i, (String)v.getValue());                 
+                    j++;
 				}
+				for(i=0;i<n.getCollectiveValues().size();i++) { // collective attributes
+                    Value v = n.getCollectiveValue(i); 
+                    instance.setValue(j, (double)v.getValue());
+                    j++;
+                }
 				instance.setValue(j, (double)n.getTarget().getValue());
 				trainingSet.add(instance);
-			}
+				
+				
+			} // end if	
 			//November 25: added to have trainign set that encloses the entir network)
 		/*	else 
 			{
@@ -815,26 +847,37 @@ public class DataSetUtility {
 	 * 
 	 * @return Instances contenente gli elementi collective dei nodi non sample del network
 	 */
-	public Instances createRegressionCollectiveWorkingSet(){
-		FastVector fv = createRegressionCollectiveHeader();
-		Instances workingSet = new Instances("collectiveWorkingSet",fv,0);//creo workingSet vuoto
-		
-		//aggiungo ogni nodo non sample al trainingSet
-		Instance instance = null;
-		
-		for(Node n : g.nodes()){
-			if(!n.isSample() && !n.isWorkingToSample()){	
-				instance = new Instance(fv.size());
-				instance.setDataset(workingSet);
-				int j;
-				for(j=0;j<n.getCollectiveValues().size();j++){
-					Value v = n.getCollectiveValue(j);
-					instance.setValue(j, (double)v.getValue());
-				}
-				workingSet.add(instance);
-			}
-		}
-		return workingSet;
+	public Instances createRegressionCollectiveWorkingSet() {
+	    FastVector fv = createRegressionCollectiveHeader();
+        Instances workingSet = new Instances("collectiveWorkingSet",fv,0);//creo workingSet vuoto
+        
+        //aggiungo ogni nodo non sample al trainingSet
+        Instance instance = null;
+        
+        for(Node n : g.nodes()){
+            if(!n.isSample() && !n.isWorkingToSample()){    
+                instance = new Instance(fv.size());
+                instance.setDataset(workingSet);
+
+                int i;
+                int j=0; //count all attributes
+                for(i=0;i<n.getValues().size();i++){
+                    Value v = n.getValue(j);
+                    if(v instanceof ContinuousValue)
+                        instance.setValue(i, (double)v.getValue());
+                    else 
+                        instance.setValue(i, (String)v.getValue());                 
+                    j++;
+                }
+                for(i=0; i<n.getCollectiveValues().size(); i++) {
+                    Value v = n.getCollectiveValue(i);
+                    instance.setValue(j, (double)v.getValue());
+                    j++;
+                }
+                workingSet.add(instance);
+            }
+        }
+        return workingSet;
 	}
 	
 	
