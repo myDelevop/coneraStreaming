@@ -8,3 +8,4 @@
         eseguite due volte perchè le prime due fanno la stessa cosa dell'ultima
         
 2 - vedere cosa succede se un nodo è isolato
+3 - attPosition = -1 (?) vedere Graph.java

@@ -31,6 +31,7 @@ import data.dataInstance.Neighbourhood;
 import data.dataInstance.Node;
 import data.dataInstance.Value;
 import data.schema.Attribute;
+import data.schema.AverageAttribute;
 import data.schema.CollectiveAttribute;
 import data.schema.ContinuousAttribute;
 import data.schema.DISCRETIZATIONTYPE;
@@ -555,6 +556,9 @@ public class Network{
                 break;
 			
             case Average:
+                for(i=1; i<=nN; i++) {
+                    collAttributes.add(new AverageAttribute("Average_N_" + i, idS++, ns.weight));
+                }
                 break;
 
             case GI:

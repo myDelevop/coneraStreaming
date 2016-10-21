@@ -1,0 +1,82 @@
+Report:yacht_arffTrain_1_arffSample1.txtSTDDEVR2
+***Iteration 0
+Labeled nodes:4
+Unlabeled nodes:4
+rmse:61.45726652580811
+mae:33.25268339835459
+r2V:-15.699825222880122
+rae:2.6258164760323437
+rse:-0.01032529194933513
+Elapsed time:548
+***Iteration 1 COLLECTIVE STEP
+Labeled nodes:4
+Unlabeled nodes:4
+rmse:61.45726652580811
+mae:33.25268339835459
+r2V:-15.699825222880122
+rae:2.6258164760323437
+rse:-0.01032529194933513
+Elapsed time:29
+***Iteration 1 DESCRIPTIVE STEP
+Labeled nodes:5
+Unlabeled nodes:3
+rmse:14.998157786875026
+mae:12.5315
+r2V:0.005416425708751893
+rae:1.0455441414194087
+rse:-0.009609470430812781
+Elapsed time:46
+***Iteration 2 COLLECTIVE STEP
+Labeled nodes:5
+Unlabeled nodes:3
+rmse:14.998157786875026
+mae:12.5315
+r2V:0.005416425708751893
+rae:1.0455441414194087
+rse:-0.009609470430812781
+Elapsed time:25
+***Iteration 2 DESCRIPTIVE STEP
+Labeled nodes:6
+Unlabeled nodes:2
+rmse:12.268347371273045
+mae:8.674166666666668
+r2V:0.3345160670496451
+rae:1.5342324415948119
+rse:-0.00110204686252583
+Elapsed time:23
+***Iteration 3 COLLECTIVE STEP
+Labeled nodes:6
+Unlabeled nodes:2
+rmse:2.593209383112414
+mae:1.6834770034705004
+r2V:0.9702668710242366
+rae:0.2977629013434447
+rse:-5.013688383826541E-5
+Elapsed time:40
+***Iteration 3 DESCRIPTIVE STEP
+Labeled nodes:7
+Unlabeled nodes:1
+rmse:7.295
+mae:3.6475
+r2V:0.764703190465636
+rae:1.3188700564971751
+rse:-3.930857609656304E-4
+Elapsed time:32
+***Iteration 4 COLLECTIVE STEP
+Labeled nodes:7
+Unlabeled nodes:1
+rmse:2.0151870078522047
+mae:1.0075935039261024
+r2V:0.9820445557376629
+rae:0.36432759463994663
+rse:-3.0322175676077793E-5
+Elapsed time:30
+***Iteration 4 DESCRIPTIVE STEP
+Labeled nodes:8
+Unlabeled nodes:0
+rmse:0.0
+mae:0.0
+r2V:1.0
+rae:NaN
+rse:-0.0
+Elapsed time:40
