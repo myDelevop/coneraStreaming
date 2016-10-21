@@ -1,0 +1,10 @@
+1 - nel metodo public void compute(Neighbourhood nh, FrequencyAttribute f) { ...  
+    della classe FrequencyAttribute, ci sono queste istruzioni:
+        
+        countValues=f.countValues;
+        nSize=f.nSize;
+        update(nh);
+        
+        eseguite due volte perchè le prime due fanno la stessa cosa dell'ultima
+        
+2 - 
