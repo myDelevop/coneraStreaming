@@ -66,7 +66,7 @@ public class AverageAttribute extends CollectiveAttribute {
     public void compute(Neighbourhood nh, AverageAttribute a) {
         nSize = a.nSize;
         weightedNsize = a.weightedNsize;
-        update(nh);
+        //update(nh);
         Iterator<Edge> it = nh.externalIterator();
         while(it.hasNext()) {
             Edge e = it.next();
