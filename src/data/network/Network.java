@@ -1,33 +1,23 @@
 package data.network;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
-import java.util.Set;
 import java.util.TreeSet;
-
-import com.sun.xml.internal.ws.api.pipe.ThrowableContainerPropertySet;
 
 import collective.COLLECTIVESCHEMA;
 import data.dataInstance.Cluster;
-
 import data.dataInstance.ContinuousValue;
 import data.dataInstance.DiscreteValue;
-import data.dataInstance.Edge;
 import data.dataInstance.Graph;
-import data.dataInstance.Neighbourhood;
 import data.dataInstance.Node;
 import data.dataInstance.Value;
 import data.schema.Attribute;
@@ -37,6 +27,7 @@ import data.schema.ContinuousAttribute;
 import data.schema.DISCRETIZATIONTYPE;
 import data.schema.DiscreteAttribute;
 import data.schema.FrequencyAttribute;
+import data.schema.GIAttribute;
 import data.schema.MeanAttribute;
 import data.schema.Schema;
 import data.schema.SpeedAttribute;
@@ -45,11 +36,7 @@ import data.schema.WMeanAttribute;
 import data.schema.WSpeedAttribute;
 import data.schema.WeightI;
 import data.schema.WeightInstance;
-import mining.CLASSIFIER_TYPE;
-import mining.Predictor;
 import setup.LearningSettings;
-import weka.core.FastVector;
-import mining.M5PRegressor;
 
 public class Network{
 	
@@ -562,6 +549,9 @@ public class Network{
                 break;
 
             case GI:
+                for(i=1; i<=nN; i++) {
+                    collAttributes.add(new GIAttribute("GI*_N_" + i, idS++, ns.weight));
+                }
                 break;
 
             case Cluster:

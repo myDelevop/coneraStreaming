@@ -212,10 +212,11 @@ public class Graph implements Iterable<Node>{
             break;
 
         case Average:
-            computeFrequencyAverageValuesOnline();
+            computeAverageCollectiveValuesOnline();
             break;
 
         case GI:
+            computeGICollectiveValuesOnline();
             break;
 
         case Cluster:
@@ -417,7 +418,7 @@ public class Graph implements Iterable<Node>{
     }
 
 
-    private void computeFrequencyAverageValuesOnline() {
+    private void computeAverageCollectiveValuesOnline() {
         AverageAttribute aa = null;
         
         for(Node n : this) {
@@ -475,7 +476,11 @@ public class Graph implements Iterable<Node>{
         }
     }
 
-
+    private void computeGICollectiveValuesOnline() {
+        
+    }
+    
+    
     public void computeCollectiveValuesOffline(COLLECTIVESCHEMA schema){
 
         switch (schema) {
