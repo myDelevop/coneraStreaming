@@ -20,6 +20,7 @@ import data.schema.AverageAttribute;
 import data.schema.CollectiveAttribute;
 import data.schema.ContinuousAttribute;
 import data.schema.FrequencyAttribute;
+import data.schema.GIAttribute;
 import data.schema.MeanAttribute;
 import data.schema.Schema;
 import data.schema.SpeedAttribute;
@@ -477,7 +478,61 @@ public class Graph implements Iterable<Node>{
     }
 
     private void computeGICollectiveValuesOnline() {
+        GIAttribute gg = null;
         
+        for(Node n : this) {
+            //  System.out.println("Node "+ n.getId()+ " Y"+n.getTarget()+ " PY"+n.getPredictedTarget());
+            //      nStructure.getNeighbourhood(n,1).print();;
+            List<ContinuousValue> cv = new LinkedList<ContinuousValue>();
+            LinkedList<GIAttribute> previousNeighbourhhodFrequencyAttribute=new LinkedList<GIAttribute>();
+
+            
+            Iterator<CollectiveAttribute> itc = schema.getCollectiveAttrIterator();
+            {
+                Neighbourhood nh = nStructure.getNeighbourhood(n,  1);
+                CollectiveAttribute currentCA = itc.next(); // current collective Attribute
+                if(currentCA instanceof GIAttribute)
+                    gg = (GIAttribute) currentCA;
+                
+                try {
+                    gg.compute(nh);
+                    cv.add(new ContinuousValue(gg.get()));
+                    previousNeighbourhhodFrequencyAttribute.add(gg);
+                    
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
+                
+            }
+            // n.setCollectiveValues(cv);
+            
+            // Neigh=2,3,...
+            for (int i=2; i<=numberOfNeighourhoods; i++) {
+                Neighbourhood nh = nStructure.getNeighbourhood(n, i);
+                
+                int attPosition = 0; 
+                
+                CollectiveAttribute currentCA = itc.next(); //current Collective attribute
+                if(currentCA instanceof GIAttribute)
+                    gg = (GIAttribute) currentCA;
+                
+                try {
+                    //  System.out.println("Compute "+ aa);
+                    //  fa.compute(nh);
+                    //  System.out.println(aa.get());
+                    gg.compute(nh, previousNeighbourhhodFrequencyAttribute.get(attPosition));
+                    //  System.out.println(fa.get());                    
+                    cv.add(new ContinuousValue(gg.get()));
+                    previousNeighbourhhodFrequencyAttribute.set(attPosition, gg);
+                    
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
+
+            }
+            //  System.out.println(cv);
+            n.setCollectiveValues(cv);
+        }        
     }
     
     
