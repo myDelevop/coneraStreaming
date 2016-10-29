@@ -13,6 +13,8 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.TreeSet;
 
+import clusteringCollectiveSchema.Clustering;
+import clusteringCollectiveSchema.DescriptiveClustering;
 import collective.COLLECTIVESCHEMA;
 import data.dataInstance.Cluster;
 import data.dataInstance.ContinuousValue;
@@ -37,14 +39,21 @@ import data.schema.WSpeedAttribute;
 import data.schema.WeightI;
 import data.schema.WeightInstance;
 import setup.LearningSettings;
+import weka.core.Instances;
 
 public class Network{
 	
+    private Network n;
 	private Graph network;
 	
 	private LearningSettings l;
 	
 	private NetworkSettings ns;
+	
+	private Clustering fClustering;
+	private Clustering weightedClustering;
+	
+	
 	public Network(String networkFileName, 
 			String edgesFileName, 
 			String trainingNodesFileName,
@@ -57,6 +66,7 @@ public class Network{
 		BufferedReader edges=null;
 		BufferedReader netw=null;
 		this.l=l;
+		this.n=this;
 		try {
 			netw = new BufferedReader(new FileReader(networkSettingsFilename));
 			arff = new BufferedReader(new FileReader(networkFileName));
@@ -132,7 +142,7 @@ public class Network{
 			new ArffData(arff);
 			network.setWeight(ns.weight);
 			
-			new Clustering(clustering);
+			new Clusterings(clustering);
 			new Sample(sample);
 			new ArffCollectiveSchema(ns, l.getCollectiveSchema());
 			new Edges(edges);
@@ -243,7 +253,7 @@ public class Network{
 			new Config(config);
 			new ArffData(arff);
 			network.setWeight(ns.weight);
-			new Clustering(clustering);
+			new Clusterings(clustering);
 			new Sample(sample);
 			new Edges(edges);
 			l.update(network.size());
@@ -485,9 +495,12 @@ public class Network{
 	/**
 	 * Aggiorna il collective schema ; ha senso solo un presenza di frequency attribute con equand frequency, altrimenti si mantiene il colelctive schema esistente
 	 */
-	public void updateCollectiveSchema(){
+	public void updateCollectiveSchema(){ 
 		if (l.getCollectiveSchema().equals(COLLECTIVESCHEMA.Frequency))
-				new ArffCollectiveSchema(ns, l.getCollectiveSchema());
+		    new ArffCollectiveSchema(ns, l.getCollectiveSchema());
+		else if (l.getCollectiveSchema().equals(COLLECTIVESCHEMA.Cluster)) {
+            new ArffCollectiveSchema(ns, l.getCollectiveSchema());
+		}
 	}
 	
 	private class ArffCollectiveSchema{
@@ -555,6 +568,22 @@ public class Network{
                 break;
 
             case Cluster:
+                DataSetUtility d = new DataSetUtility(n);
+
+                Instances data = d.createClusteringData(); 
+                
+                try {
+                    // clusterizzo usando gli attributi descrittivi senza considerare la rete
+                    fClustering = new DescriptiveClustering(data, network); 
+                    for(i=1; i<=fClustering.getClusters().length; i++) {
+                        // per ogni cluster aggiungo un attributo
+                        collAttributes.add(
+                                new AverageAttribute("Cluster_N_" + i, idS++, ns.weight));
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
                 break;
             
             default:
@@ -897,8 +926,8 @@ public class Network{
 			((ContinuousAttribute) current).updateDomain(value);;
 			
 	}	
-	private class Clustering{
-		Clustering(BufferedReader br) throws IOException{
+	private class Clusterings{
+		Clusterings(BufferedReader br) throws IOException{
 			HashMap<Integer,Cluster> clusteredNodes=new HashMap<Integer,Cluster>();
 			String line = br.readLine();
 			// skip line startig by #
@@ -1016,3 +1045,4 @@ public class Network{
 	}
 
 }
+

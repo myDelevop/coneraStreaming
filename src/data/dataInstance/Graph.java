@@ -76,7 +76,7 @@ public class Graph implements Iterable<Node>{
 
     public Graph(){
         this.graphStructure = new HashMap<Node,Set<Edge>>();
-
+        
         this.schema = null;
         this.nStructure = null;
         this.numberOfNeighourhoods = 0;
@@ -743,5 +743,20 @@ public class Graph implements Iterable<Node>{
         }
         writer.close();
 
+    }
+    
+    
+    public Node getNodeByID(Integer id) {
+        Node result = null;        
+        Set<Node> nodes = graphStructure.keySet();
+        Value idValue = new ContinuousValue(id);
+        
+        for(Node n:nodes) {
+            if (n.getId().equals(idValue)) {
+                result = n;
+                break;
+            }
+        }
+        return result;        
     }
 }

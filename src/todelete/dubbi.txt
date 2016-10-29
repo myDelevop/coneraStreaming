@@ -1,3 +1,6 @@
+0 - il cluster sulle 'f' non può essere fatto la prima volta (prima del ciclo) perchè non 
+    abbiamo a disposizione le predizioni delle f
+
 1 - nel metodo public void compute(Neighbourhood nh, FrequencyAttribute f) { ...  
     della classe FrequencyAttribute, ci sono queste istruzioni:
         

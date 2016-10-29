@@ -4,7 +4,7 @@
 @attribute buoyancy numeric
 @attribute prismatic numeric
 @attribute length numeric
-@attribute todelete nominal
+@attribute draught numeric
 @attribute beam numeric
 @attribute froude numeric
 @attribute resistance numeric

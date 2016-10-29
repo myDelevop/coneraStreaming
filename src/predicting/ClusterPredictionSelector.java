@@ -46,13 +46,12 @@ public class ClusterPredictionSelector extends ClusterBasedSelector {
 		em.setOptions("-I 100 -N -1 -M 1.0E-6 -S 100".split(" "));
 		em.buildClusterer(instances);
 		
-		// apply clustering to working nodes
-		int i=0;
-		
 		Cluster clusters[]=new Cluster[em.numberOfClusters()];
 		for(int c=0;c<clusters.length;c++)
 			clusters[c]=new Cluster(c);
 		
+        // apply clustering to working nodes
+        int i=0;
 		
 		for(ReliabilityCouple r:this.reliabilitySet){
 			Instance instance=instances.instance(i);

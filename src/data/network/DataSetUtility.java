@@ -1021,6 +1021,55 @@ public class DataSetUtility {
 		return trainingSet;
 	}
 	
+	   /**
+     * 
+     * @return Instances contenente i nodi sample del network
+     */
+    public Instances createClusteringData(){
+        //this.trainingNodes = new LinkedList<Node>();
+        
+        FastVector fv = createRegressionHeaderWithId();
+        Instances clusteringSet = new Instances("clusteringSet",fv,0); //creo il trainingSet vuoto
+//        clusteringSet.setClassIndex(fv.indexOf(fv.lastElement())); //imposto l'attributo da classificare
+        
+        //aggiungo ogni nodo sample al trainingSet
+        Instance instance = null;
+        
+        for(Node n : g.nodes()){
+                //trainingNodes.add(n);
+                
+                instance = new Instance(fv.size());
+                instance.setDataset(clusteringSet);
+                
+                //instance.setValue(0, (int)(n.getId().getValue()));
+                //int i=1;
+                if(n.getId().getValue() instanceof String)
+                instance.setValue(0,(String)n.getId().getValue());
+                else
+                    instance.setValue(0,(int)n.getId().getValue());
+
+                //int i=1;
+                int j;
+                for(j=0;j<n.getValues().size();j++){
+                    Value v = n.getValue(j);
+                    
+                    if(v instanceof ContinuousValue)
+                        instance.setValue(j+1, (double)v.getValue());
+                    else 
+                        instance.setValue(j+1, (String)v.getValue());
+                    //i++;
+                }
+                if(n.getPreviousPredictedTarget() == null)
+                    instance.setValue(j+1, (double)n.getTarget().getValue());
+                else 
+                    instance.setValue(j+1, (double)n.getPreviousPredictedTarget().getValue());
+
+                clusteringSet.add(instance);
+            //  System.out.println("node:" +n.getId() +"Y:"+instance.classValue());
+            
+        }
+        return clusteringSet;
+    }
 	/**
 	 * 
 	 * @return lista dei nodi di working

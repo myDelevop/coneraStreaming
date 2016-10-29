@@ -55,6 +55,10 @@ public class Node implements Comparable<Node>,Serializable{
 	private boolean isVisited = false;
 	
 	private Cluster cluster=null;
+	
+	private Cluster descriptiveCluster = null;
+	
+	private Cluster weightedCluster = null;
 //	
 	/**
 	 * 
@@ -232,6 +236,26 @@ public class Node implements Comparable<Node>,Serializable{
 	public void setPreviousPredictedTarget(Value previousPredictedTarget) {
 		this.previousPredictedTarget = previousPredictedTarget;
 	}
+
+
+    public Cluster getDescriptiveCluster() {
+        return descriptiveCluster;
+    }
+
+
+    public void setDescriptiveCluster(Cluster descriptiveCluster) {
+        this.descriptiveCluster = descriptiveCluster;
+    }
+
+
+    public Cluster getWeightedCluster() {
+        return weightedCluster;
+    }
+
+
+    public void setWeightedCluster(Cluster weightedCluster) {
+        this.weightedCluster = weightedCluster;
+    }
 
 
 	
