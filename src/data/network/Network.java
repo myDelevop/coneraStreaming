@@ -14,6 +14,7 @@ import java.util.Scanner;
 import java.util.TreeSet;
 
 import clusteringCollectiveSchema.Clustering;
+import clusteringCollectiveSchema.ColleptiveClustering;
 import clusteringCollectiveSchema.DescriptiveClustering;
 import collective.COLLECTIVESCHEMA;
 import data.dataInstance.Cluster;
@@ -50,8 +51,6 @@ public class Network{
 	
 	private NetworkSettings ns;
 	
-	private Clustering fClustering;
-	private Clustering weightedClustering;
 	
 	
 	public Network(String networkFileName, 
@@ -83,8 +82,9 @@ public class Network{
 			new ArffData(arff);
 			
 			new Sample(sample);
+            new Edges(edges);
+
 			new ArffCollectiveSchema( ns, l.getCollectiveSchema());// crea collective schema; e lo impost in network
-			new Edges(edges);
 
 			
 		//	DataSetUtility d = new DataSetUtility(this);
@@ -574,8 +574,8 @@ public class Network{
                 
                 try {
                     // clusterizzo usando gli attributi descrittivi senza considerare la rete
-                    fClustering = new DescriptiveClustering(data, network); 
-                    for(i=1; i<=fClustering.getClusters().length; i++) {
+                    getGraph().setfClustering(new DescriptiveClustering(data, network));
+                    for(i=1; i<=getGraph().getfClustering().getClusters().length; i++) {
                         // per ogni cluster aggiungo un attributo
                         collAttributes.add(
                                 new AverageAttribute("Cluster_N_" + i, idS++, ns.weight));
@@ -584,6 +584,13 @@ public class Network{
                     e.printStackTrace();
                 }
 
+                
+                try {
+                    getGraph().setWeightedClustering(new ColleptiveClustering(network));
+                } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
                 break;
             
             default:

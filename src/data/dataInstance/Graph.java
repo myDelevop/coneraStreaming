@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import clusteringCollectiveSchema.Clustering;
 import collective.COLLECTIVESCHEMA;
 import data.schema.AverageAttribute;
 import data.schema.CollectiveAttribute;
@@ -59,6 +60,8 @@ public class Graph implements Iterable<Node>{
 
     private WeightI weight;
 
+    private Clustering fClustering;
+    private Clustering weightedClustering;
 
     /**
      * 
@@ -221,6 +224,7 @@ public class Graph implements Iterable<Node>{
             break;
 
         case Cluster:
+            computeClusteringeCollectiveValuesOnline();
             break;
 
         default:
@@ -536,6 +540,48 @@ public class Graph implements Iterable<Node>{
     }
     
     
+    private void computeClusteringeCollectiveValuesOnline() {
+        
+        // viene creato un vicinato per ogni cluster
+        List<Neighbourhood> nhs = createClusterNeighbourhoods();
+        
+        AverageAttribute aa = null;
+        
+        for(Node n : this) {
+            //  System.out.println("Node "+ n.getId()+ " Y"+n.getTarget()+ " PY"+n.getPredictedTarget());
+            //      nStructure.getNeighbourhood(n,1).print();;
+            List<ContinuousValue> cv = new LinkedList<ContinuousValue>();
+            
+            Iterator<CollectiveAttribute> itc = schema.getCollectiveAttrIterator();
+            {
+                Neighbourhood nh = nStructure.getNeighbourhood(n,  1);
+                CollectiveAttribute currentCA = itc.next(); // current collective Attribute
+                if(currentCA instanceof AverageAttribute)
+                    aa = (AverageAttribute) currentCA;
+                
+                try {
+                    aa.compute(nh);
+                    cv.add(new ContinuousValue(aa.get()));
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
+                
+            }
+            // n.setCollectiveValues(cv);
+            
+
+            //  System.out.println(cv);
+            n.setCollectiveValues(cv);
+        }
+    }
+
+    private List<Neighbourhood> createClusterNeighbourhoods() {
+        for (Cluster c:fClustering.getClusters()) {
+            
+        }
+        return null;
+    }
+
     public void computeCollectiveValuesOffline(COLLECTIVESCHEMA schema){
 
         switch (schema) {
@@ -636,7 +682,20 @@ public class Graph implements Iterable<Node>{
 
     }
 
+    
+    public Clustering getfClustering() {
+        return fClustering;
+    }
+    public void setfClustering(Clustering fClustering) {
+        this.fClustering = fClustering;
+    }
 
+    public Clustering getWeightedClustering() {
+        return weightedClustering;
+    }
+    public void setWeightedClustering(Clustering weightedClustering) {
+        this.weightedClustering = weightedClustering;
+    }
 
     /**
      * 
@@ -725,7 +784,14 @@ public class Graph implements Iterable<Node>{
         }
         return sum;
     }
+    
+    
 
+    public Map<Node, Set<Edge>> getGraphStructure() {
+        return graphStructure;
+    }
+    
+    
     public WeightI getWeight() {
         return weight;
     }

@@ -23,7 +23,7 @@ public class Cluster extends HashSet<Node> implements Comparable<Cluster> {
     }
 
     public String toString() {
-        return "C" + id; // +super.toString();
+        return "C" + id  + super.toString();
     }
 
     @Override

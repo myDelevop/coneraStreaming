@@ -58,7 +58,7 @@ public class Node implements Comparable<Node>,Serializable{
 	
 	private Cluster descriptiveCluster = null;
 	
-	private Cluster weightedCluster = null;
+	private Cluster colleptiveCluster = null;
 //	
 	/**
 	 * 
@@ -248,13 +248,13 @@ public class Node implements Comparable<Node>,Serializable{
     }
 
 
-    public Cluster getWeightedCluster() {
-        return weightedCluster;
+    public Cluster getColleptiveCluster() {
+        return colleptiveCluster;
     }
 
 
-    public void setWeightedCluster(Cluster weightedCluster) {
-        this.weightedCluster = weightedCluster;
+    public void setColleptiveCluster(Cluster colleptiveCluster) {
+        this.colleptiveCluster = colleptiveCluster;
     }
 
 

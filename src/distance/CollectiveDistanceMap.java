@@ -72,6 +72,9 @@ class NodeWeightComparator implements Comparator<NodeWeight>{
 
 public class CollectiveDistanceMap extends DistanceMap implements Serializable{
 	
+    // contiene le distanze su ogni coppia di nodi considerando i cammini minimi (Dijsktra)
+    private List<ArrayList<Double>> shortestDistances = new ArrayList<ArrayList<Double>>();
+
 	// inner class
 	class Dijkstra {
 	
@@ -205,7 +208,11 @@ public class CollectiveDistanceMap extends DistanceMap implements Serializable{
 		while(it.hasNext()){
 			Node n=it.next();
 			System.out.println("Processing node "+n.getId());
-			List<Double> W=this.new Dijkstra(n, nodes, adjacency).getDistances();
+			
+
+
+			Dijkstra dijkstra = this.new Dijkstra(n, nodes, adjacency);
+			List<Double> W=dijkstra.getDistances();
 			//System.out.println(W);
 			
 			// weight min/max
@@ -226,6 +233,8 @@ public class CollectiveDistanceMap extends DistanceMap implements Serializable{
 			r++;
 		}
 		
+		shortestDistances = mat;
+		
 		// mat normalization
 		for(r=0;r<mat.size();r++){
 			ArrayList<Double> row=mat.get(r);
@@ -235,8 +244,16 @@ public class CollectiveDistanceMap extends DistanceMap implements Serializable{
 				else
 					row.set(c, (row.get(c)-minW)/(maxW-minW));
 		}
+		
+		
 	}
 	
+public List<ArrayList<Double>> getShortestDistances() {
+        return shortestDistances;
+    }
+
+
+
 public static void main(String args[]) throws Exception{
 		
 		if(args.length !=4){

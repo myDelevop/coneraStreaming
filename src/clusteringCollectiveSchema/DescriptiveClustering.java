@@ -11,7 +11,7 @@ import weka.core.Instances;
 public class DescriptiveClustering extends Clustering {
 
     public DescriptiveClustering(Instances data, Graph graph) throws Exception {
-        super(data, graph);
+        super(graph);
         
         GregorianCalendar start=new GregorianCalendar();
         weka.clusterers.EM em=new weka.clusterers.EM();

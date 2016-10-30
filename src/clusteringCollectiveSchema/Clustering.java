@@ -9,18 +9,17 @@ public class Clustering {
     protected Cluster[] clusters;
     
     protected Graph graph;
-    protected Instances data;
     
     protected long computationtime=0;
     protected int k=0;
 
     
-    protected Clustering(Instances data, Graph graph) {
+    protected Clustering(Graph graph) {
         this.graph = graph;
-        this.data = data;
     }
 
     public Cluster[] getClusters() {
         return clusters;
     }
+    
 }
