@@ -60,8 +60,8 @@ public class Graph implements Iterable<Node>{
 
     private WeightI weight;
 
-    private Clustering fClustering;
-    private Clustering weightedClustering;
+    private Clustering collectiveClustering;
+    private Clustering descriptiveClustering;
 
     /**
      * 
@@ -541,9 +541,20 @@ public class Graph implements Iterable<Node>{
     
     
     private void computeClusteringeCollectiveValuesOnline() {
+        // CALCOLARE VALORI DESCRITTIVI:
         
-        // viene creato un vicinato per ogni cluster
-        List<Neighbourhood> nhs = createClusterNeighbourhoods();
+        // - Associo ad ogni nodo un Neighbourhood inserendo nel vicinato tutti i nodi 
+        //   appartenenti al cluster (con distanza Dijstkra se non direttamente collegati)
+        
+        // - Poichè ogni nodo ha un suo vicinato, posso applicare il metodo "compute" sull'
+        //   attributo (aa.compute(nh);cv.add(new ContinuousValue(aa.get()));) --> questo è
+        //   il valore dell'attributo
+        
+        // - Per i cluter non associati ad n, faccio la media.
+        
+        // CALCOLARE VALORI COLLETTIVI: ....
+        
+
         
         AverageAttribute aa = null;
         
@@ -554,7 +565,8 @@ public class Graph implements Iterable<Node>{
             
             Iterator<CollectiveAttribute> itc = schema.getCollectiveAttrIterator();
             {
-                Neighbourhood nh = nStructure.getNeighbourhood(n,  1);
+                Neighbourhood nh = null; //---
+                //Neighbourhood nh = nStructure.getNeighbourhood(n,  1);
                 CollectiveAttribute currentCA = itc.next(); // current collective Attribute
                 if(currentCA instanceof AverageAttribute)
                     aa = (AverageAttribute) currentCA;
@@ -576,7 +588,7 @@ public class Graph implements Iterable<Node>{
     }
 
     private List<Neighbourhood> createClusterNeighbourhoods() {
-        for (Cluster c:fClustering.getClusters()) {
+        for (Cluster c:descriptiveClustering.getClusters()) {
             
         }
         return null;
@@ -683,18 +695,18 @@ public class Graph implements Iterable<Node>{
     }
 
     
-    public Clustering getfClustering() {
-        return fClustering;
+    public Clustering getDescriptiveClustering() {
+        return descriptiveClustering;
     }
-    public void setfClustering(Clustering fClustering) {
-        this.fClustering = fClustering;
+    public void setDescriptiveClustering(Clustering descriptiveClustering) {
+        this.descriptiveClustering = descriptiveClustering;
     }
 
-    public Clustering getWeightedClustering() {
-        return weightedClustering;
+    public Clustering getCollectiveClustering() {
+        return collectiveClustering;
     }
-    public void setWeightedClustering(Clustering weightedClustering) {
-        this.weightedClustering = weightedClustering;
+    public void setCollectiveClustering(Clustering collectiveClustering) {
+        this.collectiveClustering = collectiveClustering;
     }
 
     /**

@@ -440,7 +440,7 @@ public class DataSetUtility {
         FastVector attributes = new FastVector();
         int index = 0;
         
-        //aggiungo gli attributi collective e descrittivi di schema 
+        //aggiungo gli attributi collettivi e descrittivi di schema 
         Iterator<Attribute> itDescriptive = g.getSchema().getIteratorExplanatory();
         while(itDescriptive.hasNext()) {
             Attribute current = itDescriptive.next();
@@ -620,6 +620,7 @@ public class DataSetUtility {
 		trainingSet.setClassIndex(fv.indexOf(fv.lastElement())); //imposto l'attributo da classificare
 		
 		//aggiungo ogni nodo sample al trainingSet
+		// valori descrittivi + collettivi
 		Instance instance = null;
 		
 		for(Node n : g.nodes()) {
@@ -851,7 +852,8 @@ public class DataSetUtility {
 	    FastVector fv = createRegressionCollectiveHeader();
         Instances workingSet = new Instances("collectiveWorkingSet",fv,0);//creo workingSet vuoto
         
-        //aggiungo ogni nodo non sample al trainingSet
+        // aggiungo ogni nodo non sample al trainingSet
+        // valori descrittivi + collettivi
         Instance instance = null;
         
         for(Node n : g.nodes()){

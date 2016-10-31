@@ -58,7 +58,7 @@ public class Node implements Comparable<Node>,Serializable{
 	
 	private Cluster descriptiveCluster = null;
 	
-	private Cluster colleptiveCluster = null;
+	private Cluster collectiveCluster = null;
 //	
 	/**
 	 * 
@@ -248,13 +248,13 @@ public class Node implements Comparable<Node>,Serializable{
     }
 
 
-    public Cluster getColleptiveCluster() {
-        return colleptiveCluster;
+    public Cluster getCollectiveCluster() {
+        return collectiveCluster;
     }
 
 
-    public void setColleptiveCluster(Cluster colleptiveCluster) {
-        this.colleptiveCluster = colleptiveCluster;
+    public void setCollectiveCluster(Cluster colleptiveCluster) {
+        this.collectiveCluster = colleptiveCluster;
     }
 
 

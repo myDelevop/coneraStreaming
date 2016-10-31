@@ -14,7 +14,7 @@ import java.util.Scanner;
 import java.util.TreeSet;
 
 import clusteringCollectiveSchema.Clustering;
-import clusteringCollectiveSchema.ColleptiveClustering;
+import clusteringCollectiveSchema.CollectiveClustering;
 import clusteringCollectiveSchema.DescriptiveClustering;
 import collective.COLLECTIVESCHEMA;
 import data.dataInstance.Cluster;
@@ -568,25 +568,35 @@ public class Network{
                 break;
 
             case Cluster:
+                
                 DataSetUtility d = new DataSetUtility(n);
 
                 Instances data = d.createClusteringData(); 
                 
+                // CLUSERS DESCRITTIVI
                 try {
                     // clusterizzo usando gli attributi descrittivi senza considerare la rete
-                    getGraph().setfClustering(new DescriptiveClustering(data, network));
-                    for(i=1; i<=getGraph().getfClustering().getClusters().length; i++) {
-                        // per ogni cluster aggiungo un attributo
+                    getGraph().setDescriptiveClustering(new DescriptiveClustering(data, network));
+                    for(i=1; i<=getGraph().getDescriptiveClustering().getClusters().length; i++) {
+                        // per ogni cluster descrittivo aggiungo un attributo collettivo
                         collAttributes.add(
-                                new AverageAttribute("Cluster_N_" + i, idS++, ns.weight));
+                                new AverageAttribute("Descriptive_Cluster_N_" + i, idS++, ns.weight));
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
 
-                
+
+                // CLUSERS COLLETTIVI
                 try {
-                    getGraph().setWeightedClustering(new ColleptiveClustering(network));
+                    // clusterizzo tralasciando gli attributi sui nodi ma considerando la struttura della rete
+                    getGraph().setCollectiveClustering(new CollectiveClustering(network));
+                    for(i=1; i<=getGraph().getCollectiveClustering().getClusters().length; i++) {
+                        // per ogni cluster collettivo aggiungo un attributo collettivo
+                        collAttributes.add(
+                                new AverageAttribute("Collective_Cluster_N_" + i, idS++, ns.weight));
+                    }
+                    
                 } catch (Exception e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();

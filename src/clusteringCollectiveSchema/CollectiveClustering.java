@@ -33,14 +33,14 @@ import data.dataInstance.Graph;
 import data.dataInstance.Node;
 import weka.core.Debug.Random;
 
-public class ColleptiveClustering extends Clustering {
+public class CollectiveClustering extends Clustering {
     
     String inputEdges = "apicoa/edges.txt";
     String outputClustering = "apicoa/clusters.txt";
     String modularites = "apicoa/modularites.txt";
 
 
-    public ColleptiveClustering(Graph graph) {
+    public CollectiveClustering(Graph graph) {
         super(graph);
         
         try {
@@ -68,7 +68,7 @@ public class ColleptiveClustering extends Clustering {
                 Integer id = Integer.parseInt(lineElements[0]);
                 Node n = graph.getNodeByID(id);
                 int cluster = Integer.parseInt(lineElements[1]);
-                n.setColleptiveCluster(clusters[cluster]);
+                n.setCollectiveCluster(clusters[cluster]);
                 clusters[cluster].add(n);
                 
                 line = br.readLine();

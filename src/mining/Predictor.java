@@ -86,8 +86,8 @@ public abstract class Predictor implements Iterable<Node>{
 	protected void mining() throws Exception{
 		//train
 	    
-	    System.err.println(trainingSet);
-	    System.err.println(workingSet);
+	    //System.err.println(trainingSet);
+	    //System.err.println(workingSet);
 				learnClassifier();
 				
 			//	System.out.println(this.myClassifier);
