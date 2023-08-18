@@ -547,8 +547,8 @@ public class Graph implements Iterable<Node>{
         //   appartenenti al cluster (con distanza Dijstkra se non direttamente collegati)
         
         // - Poichè ogni nodo ha un suo vicinato, posso applicare il metodo "compute" sull'
-        //   attributo (aa.compute(nh);cv.add(new ContinuousValue(aa.get()));) --> questo è
-        //   il valore dell'attributo
+        //   attributo (aa.compute(nh); --> questo è il valore dell'attributo associato a 
+        //   quel cluster. Per i restanti clusters non associati, faccio la media.
         
         // - Per i cluter non associati ad n, faccio la media.
         
